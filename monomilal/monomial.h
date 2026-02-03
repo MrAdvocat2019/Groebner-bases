@@ -1,50 +1,30 @@
 #pragma once
+#include <cassert>
+#include <iostream>
 #include <vector>
 #include <utility>
-#include <iostream>
+
 
 namespace groebner {
 
 class Monomial{
 public:
-    Monomial() : degree_(0), num_variables_(0) {}
-    
-    explicit Monomial(std::vector<size_t> exponents)
-        : exponents_(std::move(exponents)), degree_(0) {
-        num_variables_ = exponents_.size();
-        for (size_t exp : exponents_) {
-            degree_ += exp;
-        }
-    }
-    
-    size_t GetDegree() const {
-        return degree_;
-    }
-    
-    std::vector<size_t> GetExponents() const {
-        return exponents_;
-    }
-    
-    size_t GetNumVariables() const {
-        return num_variables_;
-    }
+    Monomial();
+    explicit Monomial(size_t num_variables);
+    explicit Monomial(std::vector<size_t> exponents);
 
-    bool operator==(const Monomial& other) const {
-        return exponents_ == other.exponents_;
-    }
+    size_t GetDegree() const;
+    std::vector<size_t> GetExponents() const;
+    size_t GetNumVariables() const;
 
-    bool operator<(const Monomial& other) const {
-        return exponents_ < other.exponents_;
-    }
+    bool operator==(const Monomial& other) const;
+    bool operator<(const Monomial& other) const;
 
-    void Print(const std::vector<std::string> names) const {
-        for(size_t i = 0; i < exponents_.size(); ++i){
-            if (exponents_[i] != 0) {
-                std::cout << names[i] << "^" << exponents_[i];
-            }
-        }
-    }
-    
+    Monomial operator*(const Monomial& other) const;
+    std::pair<bool, Monomial> CheckAndDivide(const Monomial& other) const;
+
+    void Print(const std::vector<std::string> names) const;
+
 private:
     size_t degree_;
     size_t num_variables_;

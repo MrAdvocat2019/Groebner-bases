@@ -19,7 +19,11 @@ class PolynomialOrdering {
         bool operator==(const PolynomialOrdering& other) const {
             return strategy_ == other.strategy_;
         }
-        
+
+        const OrderVariant& GetStrategy() const {
+            return strategy_;
+        }
+
     private:
         OrderVariant strategy_;
 };

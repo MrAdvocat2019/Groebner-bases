@@ -16,6 +16,7 @@ set(HEADERS
 
 set(SOURCES
     main.cpp
+    monomilal/monomial.cpp
     monomilal/polynomial.cpp
 )
 
