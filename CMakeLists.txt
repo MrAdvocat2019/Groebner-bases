@@ -8,16 +8,20 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include_directories(${CMAKE_SOURCE_DIR})
 
 set(HEADERS
-    monomilal/monomial.h
-    monomilal/orders.h
-    monomilal/comparator.h
-    monomilal/polynomial.h
+    monomial/monomial.h
+    monomial/term.h
+    monomial/orders.h
+    monomial/comparator.h
+    monomial/polynomial.h
+    algorithms/division.h
 )
 
 set(SOURCES
     main.cpp
-    monomilal/monomial.cpp
-    monomilal/polynomial.cpp
+    monomial/monomial.cpp
+    monomial/term.cpp
+    monomial/polynomial.cpp
+    algorithms/division.cpp
 )
 
 add_executable(Groebnerbases ${SOURCES} ${HEADERS})
