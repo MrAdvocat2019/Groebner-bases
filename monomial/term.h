@@ -1,5 +1,6 @@
-#include "monomial.h"
 #include <optional>
+
+#include "monomial.h"
 namespace groebner::monomial {
 struct Term {
   double coeff;

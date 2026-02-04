@@ -1,8 +1,8 @@
 #include "term.h"
 
 #include <cassert>
-#include "monomial/monomial.h"
 
+#include "monomial/monomial.h"
 
 namespace groebner::monomial {
 
@@ -32,7 +32,7 @@ void Term::CheckCompatibillity(const Term& other) {
          "Terms must have equal number of variables");
 }
 
-Term LCMTerm(const Term &t1, const Term &t2){
+Term LCMTerm(const Term& t1, const Term& t2) {
   return Term(LCMMonomial(t1.m, t2.m), t1.coeff * t2.coeff);
 }
 }  // namespace groebner::monomial

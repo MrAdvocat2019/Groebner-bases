@@ -47,8 +47,7 @@ Monomial Monomial::operator*(const Monomial& other) const {
   return res;
 }
 
-std::optional<Monomial> Monomial::CheckAndDivide(
-    const Monomial& other) const {
+std::optional<Monomial> Monomial::CheckAndDivide(const Monomial& other) const {
   CheckCompatibility(other);
   Monomial res(*this);
   res.degree_ -= other.degree_;
@@ -83,6 +82,8 @@ Monomial Monomial::LCM(const Monomial& other) const {
   return Monomial(result_exponents);
 }
 
-Monomial LCMMonomial(const Monomial& m1, const Monomial& m2) { return m1.LCM(m2); }
+Monomial LCMMonomial(const Monomial& m1, const Monomial& m2) {
+  return m1.LCM(m2);
+}
 
 }  // namespace groebner::monomial
