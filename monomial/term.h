@@ -1,6 +1,6 @@
 #include "monomial.h"
-namespace groebner {
-namespace monomial {
+#include <optional>
+namespace groebner::monomial {
 struct Term {
   double coeff;
   Monomial m;
@@ -10,10 +10,9 @@ struct Term {
   bool operator==(const Term& other);
 
   Term operator*(const Term& other);
-  std::pair<bool, Term> CheckAndDivide(const Term& other);
+  std::optional<Term> CheckAndDivide(const Term& other);
 
   void CheckCompatibillity(const Term& other);
 };
-Term LCM(const Term& t1, const Term& t2);
-}  // namespace monomial
-}  // namespace groebner
+Term LCMTerm(const Term& t1, const Term& t2);
+}  // namespace groebner::monomial

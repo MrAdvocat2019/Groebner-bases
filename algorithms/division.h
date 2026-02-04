@@ -4,8 +4,7 @@
 
 #include "../monomial/monomial.h"
 #include "../monomial/polynomial.h"
-namespace groebner {
-namespace algorithms {
+namespace groebner::algorithms {
 using monomial::Monomial;
 using polynomial::Polynomial;
 struct DivisionResult {
@@ -14,5 +13,4 @@ struct DivisionResult {
 };
 DivisionResult Division(const Polynomial& f,
                         const std::vector<Polynomial>& dividers);
-}  // namespace algorithms
-}  // namespace groebner
+}  // namespace groebner::algorithms

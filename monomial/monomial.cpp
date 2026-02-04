@@ -2,8 +2,7 @@
 
 #include <cassert>
 
-namespace groebner {
-namespace monomial {
+namespace groebner::monomial {
 
 Monomial::Monomial() : degree_(0), num_variables_(0) {}
 
@@ -48,18 +47,18 @@ Monomial Monomial::operator*(const Monomial& other) const {
   return res;
 }
 
-std::pair<bool, Monomial> Monomial::CheckAndDivide(
+std::optional<Monomial> Monomial::CheckAndDivide(
     const Monomial& other) const {
   CheckCompatibility(other);
   Monomial res(*this);
   res.degree_ -= other.degree_;
   for (size_t i = 0; i < num_variables_; ++i) {
     if (res.exponents_[i] < other.exponents_[i]) {
-      return {false, Monomial()};
+      return std::nullopt;
     }
     res.exponents_[i] -= other.exponents_[i];
   }
-  return {true, res};
+  return res;
 }
 
 void Monomial::Print(const std::vector<std::string> names) const {
@@ -84,7 +83,6 @@ Monomial Monomial::LCM(const Monomial& other) const {
   return Monomial(result_exponents);
 }
 
-Monomial LCM(const Monomial& m1, const Monomial& m2) { return m1.LCM(m2); }
+Monomial LCMMonomial(const Monomial& m1, const Monomial& m2) { return m1.LCM(m2); }
 
-}  // namespace monomial
-}  // namespace groebner
+}  // namespace groebner::monomial

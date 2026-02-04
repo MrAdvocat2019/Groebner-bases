@@ -1,11 +1,11 @@
 #pragma once
 #include <cassert>
 #include <iostream>
+#include <optional>
 #include <utility>
 #include <vector>
 
-namespace groebner {
-namespace monomial {
+namespace groebner::monomial {
 
 class Monomial {
  public:
@@ -21,7 +21,7 @@ class Monomial {
   bool operator<(const Monomial& other) const;
 
   Monomial operator*(const Monomial& other) const;
-  std::pair<bool, Monomial> CheckAndDivide(const Monomial& other) const;
+  std::optional<Monomial> CheckAndDivide(const Monomial& other) const;
 
   Monomial LCM(const Monomial& other) const;
 
@@ -35,7 +35,6 @@ class Monomial {
   void CheckCompatibility(const Monomial& other) const;
 };
 
-Monomial LCM(const Monomial& m1, const Monomial& m2);
+Monomial LCMMonomial(const Monomial& m1, const Monomial& m2);
 
-}  // namespace monomial
-}  // namespace groebner
+}  // namespace groebner::monomial

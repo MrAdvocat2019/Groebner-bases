@@ -4,8 +4,7 @@
 #include "comparator.h"
 #include "term.h"
 
-namespace groebner {
-namespace polynomial {
+namespace groebner::polynomial {
 
 using monomial::Monomial;
 using monomial::Term;
@@ -49,5 +48,4 @@ class Polynomial {
   void CleanUp();
 };
 
-}  // namespace polynomial
-}  // namespace groebner
+}  // namespace groebner::polynomial

@@ -1,8 +1,7 @@
 #pragma once
 #include "monomial.h"
 
-namespace groebner {
-namespace ordering {
+namespace groebner::ordering {
 
 using monomial::Monomial;
 
@@ -27,5 +26,4 @@ class GrLexOrder {
   bool operator==(const GrLexOrder&) const { return true; }
 };
 
-}  // namespace ordering
-}  // namespace groebner
+}  // namespace groebner::ordering

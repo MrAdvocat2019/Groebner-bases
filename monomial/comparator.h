@@ -5,8 +5,7 @@
 
 #include "orders.h"
 
-namespace groebner {
-namespace ordering {
+namespace groebner::ordering {
 
 using monomial::Monomial;
 
@@ -31,5 +30,4 @@ class PolynomialOrdering {
   OrderVariant strategy_;
 };
 
-}  // namespace ordering
-}  // namespace groebner
+}  // namespace groebner::ordering

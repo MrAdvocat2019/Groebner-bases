@@ -1,10 +1,10 @@
 #include "term.h"
 
 #include <cassert>
-#include <iostream>
+#include "monomial/monomial.h"
 
-namespace groebner {
-namespace monomial {
+
+namespace groebner::monomial {
 
 Term::Term(const Monomial& m, double coeff) : m(m), coeff(coeff) {}
 
@@ -18,13 +18,13 @@ Term Term::operator*(const Term& other) {
   return Term(m * other.m, coeff * other.coeff);
 }
 
-std::pair<bool, Term> Term::CheckAndDivide(const Term& other) {
+std::optional<Term> Term::CheckAndDivide(const Term& other) {
   CheckCompatibillity(other);
-  auto [divisible, result_monomial] = m.CheckAndDivide(other.m);
-  if (!divisible) {
-    return {false, Term(Monomial(), 0)};
+  auto result_monomial = m.CheckAndDivide(other.m);
+  if (!result_monomial.has_value()) {
+    return std::nullopt;
   }
-  return {true, Term(result_monomial, coeff / other.coeff)};
+  return Term(result_monomial.value(), coeff / other.coeff);
 }
 
 void Term::CheckCompatibillity(const Term& other) {
@@ -32,5 +32,7 @@ void Term::CheckCompatibillity(const Term& other) {
          "Terms must have equal number of variables");
 }
 
-}  // namespace monomial
-}  // namespace groebner
+Term LCMTerm(const Term &t1, const Term &t2){
+  return Term(LCMMonomial(t1.m, t2.m), t1.coeff * t2.coeff);
+}
+}  // namespace groebner::monomial

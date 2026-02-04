@@ -3,8 +3,7 @@
 #include <cmath>
 #include <iostream>
 
-namespace groebner {
-namespace polynomial {
+namespace groebner::polynomial {
 
 Polynomial::Polynomial(Term t, OrderVariant strategy)
     : terms_(std::move(strategy)), num_variables_(t.m.GetNumVariables()) {
@@ -142,5 +141,4 @@ void Polynomial::CleanUp() {
   }
 }
 
-}  // namespace polynomial
-}  // namespace groebner
+}  // namespace groebner::polynomial

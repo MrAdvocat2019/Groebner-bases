@@ -1,7 +1,5 @@
 #include "division.h"
-namespace groebner {
-namespace algorithms {
-using monomial::Monomial;
+namespace groebner::algorithms {
 using monomial::Term;
 using ordering::OrderVariant;
 using polynomial::Polynomial;
@@ -23,9 +21,9 @@ DivisionResult Division(const Polynomial& f,
       Term LT_p = p.LT();
       Term LT_f_i = dividers[i].LT();
       auto monomial_res = LT_p.CheckAndDivide(LT_f_i);
-      if (monomial_res.first) {
-        a[i] += Polynomial(monomial_res.second, strategy);
-        p -= Polynomial(monomial_res.second, strategy) * dividers[i];
+      if (monomial_res.has_value()) {
+        a[i] += Polynomial(monomial_res.value(), strategy);
+        p -= Polynomial(monomial_res.value(), strategy) * dividers[i];
         flag = true;
       } else {
         ++i;
@@ -39,5 +37,4 @@ DivisionResult Division(const Polynomial& f,
   }
   return {a, r};
 }
-}  // namespace algorithms
-}  // namespace groebner
+}  // namespace groebner::algorithms
