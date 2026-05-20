@@ -1,40 +1,41 @@
 #pragma once
-#include <cassert>
-#include <iostream>
 #include <optional>
-#include <utility>
 #include <vector>
 
-namespace groebner::monomial {
+namespace groebner {
 
-class Monomial {
- public:
-  Monomial();
-  explicit Monomial(size_t num_variables);
-  explicit Monomial(std::vector<size_t> exponents);
+    class Monomial {
+    public:
+        Monomial();
+        static Monomial FromExponents(std::vector<size_t>&& exponents);
+        static Monomial FromExponents(const std::vector<size_t>& exponents);
 
-  size_t GetDegree() const;
-  std::vector<size_t> GetExponents() const;
-  size_t GetNumVariables() const;
+        size_t Degree() const;
+        const std::vector<size_t>& Exponents() const;
+        size_t Size() const;
 
-  bool operator==(const Monomial& other) const;
-  bool operator<(const Monomial& other) const;
+        bool operator==(const Monomial& other) const;
+        bool operator!=(const Monomial& other) const;
 
-  Monomial operator*(const Monomial& other) const;
-  std::optional<Monomial> CheckAndDivide(const Monomial& other) const;
+        Monomial& operator*=(const Monomial& other);
+        bool IsDivisibleBy(const Monomial& other) const;
+        std::optional<Monomial> DivideBy(const Monomial& other) const;
 
-  Monomial LCM(const Monomial& other) const;
+        Monomial Lcm(const Monomial& other) const;
 
-  void Print(const std::vector<std::string> names) const;
+        void Print(const std::vector<std::string>& names) const;
 
- private:
-  size_t degree_;
-  size_t num_variables_;
-  std::vector<size_t> exponents_;
+        friend Monomial operator*(Monomial left, const Monomial& right);
 
-  void CheckCompatibility(const Monomial& other) const;
-};
+    private:
+        explicit Monomial(std::vector<size_t>&& clean_exponents);
 
-Monomial LCMMonomial(const Monomial& m1, const Monomial& m2);
+        static void RemoveTrailingZeroes(std::vector<size_t>& v);
+        static size_t ComputeDegree(const std::vector<size_t>& v);
 
-}  // namespace groebner::monomial
+        std::vector<size_t> exponents_;
+        size_t degree_;
+        size_t size_;
+    };
+
+} // namespace groebner

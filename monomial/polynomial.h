@@ -1,51 +1,46 @@
 #pragma once
 #include <map>
 
-#include "comparator.h"
+#include "orders.h"
 #include "term.h"
 
-namespace groebner::polynomial {
+namespace groebner {
 
-using monomial::Monomial;
-using monomial::Term;
-using ordering::LexOrder;
-using ordering::OrderVariant;
-using ordering::PolynomialOrdering;
+    class Polynomial {
+    public:
+        Polynomial(Term t, size_t num_ring_variables, Order order);
+        Polynomial(size_t num_ring_variables, Order order);
 
-class Polynomial {
- public:
-  Polynomial(Term t, OrderVariant strategy);
-  Polynomial(size_t num_variables, OrderVariant strategy = LexOrder{});
+        size_t NumRingVariables() const;
+        Order GetOrder() const;
 
-  size_t GetNumVariables() const;
-  OrderVariant GetStrategy() const;
+        void AddTerm(const Term& term);
 
-  void AddTerm(Term term);
+        Polynomial& operator+=(const Polynomial& other);
+        Polynomial& operator-=(const Polynomial& other);
+        Polynomial& operator*=(const Polynomial& other);
 
-  Polynomial operator+(const Polynomial& other);
-  Polynomial operator-(const Polynomial& other);
-  Polynomial operator*(const Polynomial& other);
+        bool operator==(const Polynomial& other);
+        bool operator!=(const Polynomial& other);
 
-  Polynomial& operator+=(const Polynomial& other);
-  Polynomial& operator-=(const Polynomial& other);
+        Term LT() const;
+        double LC() const;
+        Monomial LM() const;
 
-  bool operator==(const Polynomial& other);
-  bool operator!=(const Polynomial& other);
+        bool IsZero() const;
 
-  Term LT() const;
-  double LC() const;
-  Monomial LM() const;
+        void Print(const std::vector<std::string>& names) const;
 
-  bool IsZero() const;
+        friend Polynomial operator+(Polynomial left, const Polynomial& right);
+        friend Polynomial operator-(Polynomial left, const Polynomial& right);
+        friend Polynomial operator*(const Polynomial& left, const Polynomial& right);
 
-  void Print(const std::vector<std::string>& names) const;
+    private:
+        void CheckCompatibility(const Polynomial& other) const;
+        void CleanUp();
 
- private:
-  size_t num_variables_;
-  std::map<Monomial, double, PolynomialOrdering> terms_;
+        size_t num_ring_variables_;
+        std::map<Monomial, double, Order> terms_;
+    };
 
-  void CheckCompatibility(const Polynomial& other) const;
-  void CleanUp();
-};
-
-}  // namespace groebner::polynomial
+} // namespace groebner

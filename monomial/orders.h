@@ -1,29 +1,37 @@
 #pragma once
+#include <functional>
+#include <utility>
+
 #include "monomial.h"
 
-namespace groebner::ordering {
+namespace groebner {
 
-using monomial::Monomial;
+    class Order {
+    public:
+        enum class Kind : unsigned char { Lex, GrLex };
 
-class LexOrder {
- public:
-  bool operator()(const Monomial& lhs, const Monomial& rhs) const {
-    return lhs < rhs;
-  }
+        bool operator()(const Monomial& lhs, const Monomial& rhs) const {
+            return cmp_(lhs, rhs);
+        }
 
-  bool operator==(const LexOrder&) const { return true; }
-};
+        bool operator==(const Order& other) const {
+            return kind_ == other.kind_;
+        }
 
-class GrLexOrder {
- public:
-  bool operator()(const Monomial& lhs, const Monomial& rhs) const {
-    if (lhs.GetDegree() != rhs.GetDegree()) {
-      return lhs.GetDegree() < rhs.GetDegree();
-    }
-    return lhs < rhs;
-  }
+        Kind GetKind() const {
+            return kind_;
+        }
 
-  bool operator==(const GrLexOrder&) const { return true; }
-};
+        static Order Lex();
+        static Order GrLex();
 
-}  // namespace groebner::ordering
+    private:
+        Order(Kind kind,
+              std::function<bool(const Monomial&, const Monomial&)> cmp)
+            : kind_(kind), cmp_(std::move(cmp)) {}
+
+        Kind kind_;
+        std::function<bool(const Monomial&, const Monomial&)> cmp_;
+    };
+
+} // namespace groebner

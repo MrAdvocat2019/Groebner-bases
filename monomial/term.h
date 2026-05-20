@@ -1,19 +1,26 @@
+#pragma once
+
 #include <optional>
 
 #include "monomial.h"
-namespace groebner::monomial {
-struct Term {
-  double coeff;
-  Monomial m;
+namespace groebner {
+    class Term {
+    public:
+        Term(const Monomial& m, double coeff);
 
-  Term(const Monomial& m, double coeff);
+        double GetCoeff() const;
+        const Monomial& GetMonomial() const;
 
-  bool operator==(const Term& other);
+        bool operator==(const Term& other);
 
-  Term operator*(const Term& other);
-  std::optional<Term> CheckAndDivide(const Term& other);
+        Term& operator*=(const Term& other);
+        std::optional<Term> DivideBy(const Term& other);
+        Term Lcm(const Term& other) const;
 
-  void CheckCompatibillity(const Term& other);
-};
-Term LCMTerm(const Term& t1, const Term& t2);
-}  // namespace groebner::monomial
+        friend Term operator*(Term left, const Term& right);
+
+    private:
+        double coeff_;
+        Monomial m_;
+    };
+} // namespace groebner
