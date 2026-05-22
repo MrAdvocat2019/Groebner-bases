@@ -3,24 +3,48 @@
 #include <optional>
 
 #include "monomial.h"
+
 namespace groebner {
-    class Term {
-    public:
-        Term(const Monomial& m, double coeff);
 
-        double GetCoeff() const;
-        const Monomial& GetMonomial() const;
+template <typename Field>
+class Term {
+ public:
+  Term(const Monomial& m, Field coeff) : m_(m), coeff_(std::move(coeff)) {}
 
-        bool operator==(const Term& other);
+  const Field& GetCoeff() const { return coeff_; }
+  const Monomial& GetMonomial() const { return m_; }
 
-        Term& operator*=(const Term& other);
-        std::optional<Term> DivideBy(const Term& other);
-        Term Lcm(const Term& other) const;
+  bool operator==(const Term& other) const {
+    return m_ == other.m_ && coeff_ == other.coeff_;
+  }
+  bool operator!=(const Term& other) const { return !(*this == other); }
 
-        friend Term operator*(Term left, const Term& right);
+  Term& operator*=(const Term& other) {
+    m_ *= other.m_;
+    coeff_ *= other.coeff_;
+    return *this;
+  }
 
-    private:
-        double coeff_;
-        Monomial m_;
-    };
-} // namespace groebner
+  std::optional<Term> DivideBy(const Term& other) const {
+    auto result_monomial = m_.DivideBy(other.m_);
+    if (!result_monomial.has_value()) {
+      return std::nullopt;
+    }
+    return Term(result_monomial.value(), coeff_ / other.coeff_);
+  }
+
+  Term Lcm(const Term& other) const {
+    return Term(m_.Lcm(other.m_), coeff_ * other.coeff_);
+  }
+
+  friend Term operator*(Term left, const Term& right) {
+    left *= right;
+    return left;
+  }
+
+ private:
+  Monomial m_;
+  Field coeff_;
+};
+
+}  // namespace groebner

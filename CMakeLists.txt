@@ -10,24 +10,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
-set(HEADERS
-    monomial/monomial.h
-    monomial/term.h
-    monomial/orders.h
-    monomial/polynomial.h
-    algorithms/division.h
-    algorithms/s_poly.h
-)
 
 set(SOURCES
     main.cpp
     monomial/monomial.cpp
-    monomial/term.cpp
     monomial/orders.cpp
-    monomial/polynomial.cpp
-    algorithms/division.cpp
-    algorithms/s_poly.cpp
+    fields/rational.cpp
 )
 
-add_executable(Groebnerbases ${SOURCES} ${HEADERS})
-
+add_executable(Groebnerbases ${SOURCES})
