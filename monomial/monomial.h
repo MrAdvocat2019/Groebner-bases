@@ -24,8 +24,6 @@ class Monomial {
 
   Monomial Lcm(const Monomial& other) const;
 
-  void Print(const std::vector<std::string>& names) const;
-
   friend Monomial operator*(Monomial left, const Monomial& right);
   friend Monomial operator/(Monomial left, const Monomial& right);
 

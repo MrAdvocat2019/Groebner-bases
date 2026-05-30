@@ -1,24 +1,20 @@
 #pragma once
-#include <cstddef>
-
 #include "orders.h"
 #include "polynomial.h"
 
 namespace groebner {
 
-template <typename Field>
+template <typename F>
 class PolyBuilder {
  public:
-  PolyBuilder(Order order, size_t num_ring_variables)
-      : order_(order), num_ring_variables_(num_ring_variables) {}
+  explicit PolyBuilder(Order order) : order_(std::move(order)) {}
 
-  Polynomial<Field> of(Term<Field>&& t) const {
-    return Polynomial<Field>(std::move(t), num_ring_variables_, order_);
+  Polynomial<F> of(Term<F> t) const {
+    return Polynomial<F>(std::move(t), order_);
   }
 
  private:
   Order order_;
-  size_t num_ring_variables_;
 };
 
 }  // namespace groebner

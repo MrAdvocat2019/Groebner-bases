@@ -6,13 +6,13 @@
 
 namespace groebner {
 
-template <typename Field>
+template <typename F>
 class Term {
  public:
-  Term(const Monomial& m, Field coeff) : m_(m), coeff_(std::move(coeff)) {}
+  Term(const Monomial& m, F coeff) : m_(m), coeff_(std::move(coeff)) {}
 
-  const Field& GetCoeff() const { return coeff_; }
-  const Monomial& GetMonomial() const { return m_; }
+  const F& Coeff() const { return coeff_; }
+  const Monomial& M() const { return m_; }
 
   bool operator==(const Term& other) const {
     return m_ == other.m_ && coeff_ == other.coeff_;
@@ -44,7 +44,7 @@ class Term {
 
  private:
   Monomial m_;
-  Field coeff_;
+  F coeff_;
 };
 
 }  // namespace groebner

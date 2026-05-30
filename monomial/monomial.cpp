@@ -95,14 +95,6 @@ std::optional<Monomial> Monomial::DivideBy(const Monomial& other) const {
   return Monomial(std::move(result));
 }
 
-void Monomial::Print(const std::vector<std::string>& names) const {
-  for (size_t i = 0; i < exponents_.size(); ++i) {
-    if (exponents_[i] != 0) {
-      std::cout << names[i] << "^" << exponents_[i];
-    }
-  }
-}
-
 Monomial Monomial::Lcm(const Monomial& other) const {
   size_t max_size = std::max(exponents_.size(), other.exponents_.size());
   std::vector<size_t> result_exponents(max_size);
