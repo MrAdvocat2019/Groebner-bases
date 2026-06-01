@@ -11,11 +11,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include_directories(${CMAKE_SOURCE_DIR})
 
 
-set(SOURCES
-    main.cpp
+set(LIB_SOURCES
     monomial/monomial.cpp
     monomial/orders.cpp
     fields/rational.cpp
 )
 
-add_executable(Groebnerbases ${SOURCES})
+add_executable(Groebnerbases main.cpp ${LIB_SOURCES})
+
+add_executable(Groebnerbases_test tests/test.cpp ${LIB_SOURCES})

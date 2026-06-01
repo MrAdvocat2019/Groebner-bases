@@ -22,19 +22,21 @@ std::optional<size_t> FindDivider(const Term<F>& lt,
   return std::nullopt;
 }
 template <typename F>
-void ReduceStep(Polynomial<F>& p, Polynomial<F>& quotitient,
-                const Polynomial<F>& divider, const PolyBuilder<F>& builder) {
-  Term<F> monomial_res = p.LT().DivideBy(divider.LT()).value();
-  Polynomial<F> polinomial_res = builder.of(monomial_res);
-  quotitient += polinomial_res;
-  p -= polinomial_res * divider;
+void ReduceStep(const Polynomial<F>& divider, const PolyBuilder<F>& builder,
+                Polynomial<F>* p, Polynomial<F>* quotient) {
+  assert(p != nullptr && quotient != nullptr);
+  Term<F> monomial_res = p->LT().DivideBy(divider.LT()).value();
+  Polynomial<F> polynomial_res = builder.of(monomial_res);
+  *quotient += polynomial_res;
+  *p -= polynomial_res * divider;
 }
 template <typename F>
-void UpdateRemainder(Polynomial<F>& p, Polynomial<F>& remainder,
-                     const PolyBuilder<F>& builder) {
-  Polynomial<F> lt_poly = builder.of(p.LT());
-  remainder += lt_poly;
-  p -= lt_poly;
+void UpdateRemainder(const PolyBuilder<F>& builder, Polynomial<F>* p,
+                     Polynomial<F>* remainder) {
+  assert(p != nullptr && remainder != nullptr);
+  Polynomial<F> lt_poly = builder.of(p->LT());
+  *remainder += lt_poly;
+  *p -= lt_poly;
 }
 
 }  // namespace detail
@@ -63,9 +65,9 @@ ReduceResult<F> Reduce(const Polynomial<F>& f,
   while (!p.IsZero()) {
     std::optional<size_t> found = detail::FindDivider(p.LT(), dividers);
     if (found) {
-      detail::ReduceStep(p, a[*found], dividers[*found], builder);
+      detail::ReduceStep(dividers[*found], builder, &p, &a[*found]);
     } else {
-      detail::UpdateRemainder(p, r, builder);
+      detail::UpdateRemainder(builder, &p, &r);
     }
   }
   return {std::move(a), std::move(r)};

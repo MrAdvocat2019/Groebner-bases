@@ -6,7 +6,7 @@ namespace groebner {
 
 class Monomial {
  public:
-  Monomial();
+  Monomial() = default;
   static Monomial FromExponents(std::vector<size_t>&& exponents);
   static Monomial FromExponents(const std::vector<size_t>& exponents);
 
@@ -30,12 +30,12 @@ class Monomial {
  private:
   explicit Monomial(std::vector<size_t>&& clean_exponents);
 
-  static void RemoveTrailingZeroes(std::vector<size_t>& v);
+  static void RemoveTrailingZeroes(std::vector<size_t>* v);
   static size_t ComputeDegree(const std::vector<size_t>& v);
+  static bool IsValid(const std::vector<size_t>& exponents, size_t degree);
 
   std::vector<size_t> exponents_;
-  size_t degree_;
-  size_t size_;
+  size_t degree_ = 0;
 };
 
 }  // namespace groebner

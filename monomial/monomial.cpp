@@ -2,19 +2,17 @@
 
 #include <algorithm>
 #include <cassert>
-#include <iostream>
 
 namespace groebner {
 
-Monomial::Monomial() : exponents_(), degree_(0), size_(0) {}
-
 Monomial::Monomial(std::vector<size_t>&& clean_exponents)
     : exponents_(std::move(clean_exponents)),
-      degree_(ComputeDegree(exponents_)),
-      size_(exponents_.size()) {}
+      degree_(ComputeDegree(exponents_)) {
+  assert(IsValid(exponents_, degree_) && "Monomial invariant violated");
+}
 
 Monomial Monomial::FromExponents(std::vector<size_t>&& exponents) {
-  RemoveTrailingZeroes(exponents);
+  RemoveTrailingZeroes(&exponents);
   return Monomial(std::move(exponents));
 }
 
@@ -26,16 +24,14 @@ size_t Monomial::Degree() const { return degree_; }
 
 const std::vector<size_t>& Monomial::Exponents() const { return exponents_; }
 
-size_t Monomial::Size() const { return size_; }
+size_t Monomial::Size() const { return exponents_.size(); }
 
 bool Monomial::operator==(const Monomial& other) const {
-  return degree_ == other.degree_ && size_ == other.size_ &&
-         exponents_ == other.exponents_;
+  return degree_ == other.degree_ && exponents_ == other.exponents_;
 }
 
 bool Monomial::operator!=(const Monomial& other) const {
-  return degree_ != other.degree_ || size_ != other.size_ ||
-         exponents_ != other.exponents_;
+  return !(*this == other);
 }
 
 Monomial& Monomial::operator*=(const Monomial& other) {
@@ -46,7 +42,7 @@ Monomial& Monomial::operator*=(const Monomial& other) {
   for (size_t i = 0; i < other.exponents_.size(); ++i) {
     exponents_[i] += other.exponents_[i];
   }
-  size_ = exponents_.size();
+  assert(IsValid(exponents_, degree_) && "Monomial invariant violated");
   return *this;
 }
 
@@ -60,9 +56,9 @@ Monomial& Monomial::operator/=(const Monomial& other) {
   for (size_t i = 0; i < other.exponents_.size(); ++i) {
     exponents_[i] -= other.exponents_[i];
   }
-  RemoveTrailingZeroes(exponents_);
+  RemoveTrailingZeroes(&exponents_);
   degree_ -= other.degree_;
-  size_ = exponents_.size();
+  assert(IsValid(exponents_, degree_) && "Monomial invariant violated");
   return *this;
 }
 
@@ -72,7 +68,7 @@ Monomial operator/(Monomial left, const Monomial& right) {
 }
 
 bool Monomial::IsDivisibleBy(const Monomial& other) const {
-  if (other.size_ > size_) {
+  if (other.exponents_.size() > exponents_.size()) {
     return false;
   }
   for (size_t i = 0; i < other.exponents_.size(); ++i) {
@@ -91,7 +87,7 @@ std::optional<Monomial> Monomial::DivideBy(const Monomial& other) const {
   for (size_t i = 0; i < other.exponents_.size(); ++i) {
     result[i] -= other.exponents_[i];
   }
-  RemoveTrailingZeroes(result);
+  RemoveTrailingZeroes(&result);
   return Monomial(std::move(result));
 }
 
@@ -103,13 +99,14 @@ Monomial Monomial::Lcm(const Monomial& other) const {
     size_t b = i < other.exponents_.size() ? other.exponents_[i] : 0;
     result_exponents[i] = std::max(a, b);
   }
-  RemoveTrailingZeroes(result_exponents);
+  RemoveTrailingZeroes(&result_exponents);
   return Monomial(std::move(result_exponents));
 }
 
-void Monomial::RemoveTrailingZeroes(std::vector<size_t>& v) {
-  while (!v.empty() && v.back() == 0) {
-    v.pop_back();
+void Monomial::RemoveTrailingZeroes(std::vector<size_t>* v) {
+  assert(v != nullptr);
+  while (!v->empty() && v->back() == 0) {
+    v->pop_back();
   }
 }
 
@@ -119,6 +116,13 @@ size_t Monomial::ComputeDegree(const std::vector<size_t>& v) {
     sum += exp;
   }
   return sum;
+}
+
+bool Monomial::IsValid(const std::vector<size_t>& exponents, size_t degree) {
+  if (!exponents.empty() && exponents.back() == 0) {
+    return false;
+  }
+  return ComputeDegree(exponents) == degree;
 }
 
 }  // namespace groebner
