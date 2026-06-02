@@ -20,7 +20,6 @@ class Monomial {
   Monomial& operator*=(const Monomial& other);
   Monomial& operator/=(const Monomial& other);
   bool IsDivisibleBy(const Monomial& other) const;
-  std::optional<Monomial> DivideBy(const Monomial& other) const;
 
   Monomial Lcm(const Monomial& other) const;
 

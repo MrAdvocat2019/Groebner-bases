@@ -79,18 +79,6 @@ bool Monomial::IsDivisibleBy(const Monomial& other) const {
   return true;
 }
 
-std::optional<Monomial> Monomial::DivideBy(const Monomial& other) const {
-  if (!IsDivisibleBy(other)) {
-    return std::nullopt;
-  }
-  std::vector<size_t> result(exponents_);
-  for (size_t i = 0; i < other.exponents_.size(); ++i) {
-    result[i] -= other.exponents_[i];
-  }
-  RemoveTrailingZeroes(&result);
-  return Monomial(std::move(result));
-}
-
 Monomial Monomial::Lcm(const Monomial& other) const {
   size_t max_size = std::max(exponents_.size(), other.exponents_.size());
   std::vector<size_t> result_exponents(max_size);

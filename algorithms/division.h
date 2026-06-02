@@ -14,8 +14,7 @@ std::optional<size_t> FindDivider(const Term<F>& lt,
                                   const std::vector<Polynomial<F>>& dividers) {
   for (size_t i = 0; i < dividers.size(); ++i) {
     Term<F> LT_f_i = dividers[i].LT();
-    auto monomial_res = lt.DivideBy(LT_f_i);
-    if (monomial_res.has_value()) {
+    if (lt.IsDivisibleBy(LT_f_i)) {
       return i;
     }
   }
@@ -25,7 +24,7 @@ template <typename F>
 void ReduceStep(const Polynomial<F>& divider, const PolyBuilder<F>& builder,
                 Polynomial<F>* p, Polynomial<F>* quotient) {
   assert(p != nullptr && quotient != nullptr);
-  Term<F> monomial_res = p->LT().DivideBy(divider.LT()).value();
+  Term<F> monomial_res = p->LT() / divider.LT();
   Polynomial<F> polynomial_res = builder.of(monomial_res);
   *quotient += polynomial_res;
   *p -= polynomial_res * divider;

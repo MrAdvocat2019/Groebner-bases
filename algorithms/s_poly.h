@@ -15,12 +15,8 @@ Polynomial<F> SPolynomial(const Polynomial<F>& p1, const Polynomial<F>& p2) {
   Term<F> lt_2 = p2.LT();
   Term<F> lcm = lt_1.Lcm(lt_2);
 
-  auto m1_res = lcm.DivideBy(lt_1);
-  auto m2_res = lcm.DivideBy(lt_2);
-  assert(m1_res.has_value() && m2_res.has_value());
-
-  Term<F> m1 = m1_res.value();
-  Term<F> m2 = m2_res.value();
+  Term<F> m1 = lcm / lt_1;
+  Term<F> m2 = lcm / lt_2;
 
   PolyBuilder<F> polynom(order);
 

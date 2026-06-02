@@ -8,7 +8,7 @@ namespace groebner {
 
 class Order {
  public:
-  enum class Kind : unsigned char { Lex, GrLex };
+  enum class Kind : unsigned char { Lex, GrLex, GrvLex };
 
   bool operator()(const Monomial& lhs, const Monomial& rhs) const {
     return cmp_(lhs, rhs);
@@ -20,6 +20,7 @@ class Order {
 
   static Order Lex();
   static Order GrLex();
+  static Order GrvLex();
 
  private:
   Order(Kind kind, std::function<bool(const Monomial&, const Monomial&)> cmp)
