@@ -23,5 +23,7 @@ Groebnerbases
 *.swp
 *.swo
 *~
+.cache/
+tmp/
 
 .DS_Store
