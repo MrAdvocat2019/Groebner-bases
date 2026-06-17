@@ -17,6 +17,4 @@ set(LIB_SOURCES
     fields/rational.cpp
 )
 
-add_executable(Groebnerbases main.cpp ${LIB_SOURCES})
-
 add_executable(Groebnerbases_test tests/test.cpp ${LIB_SOURCES})
